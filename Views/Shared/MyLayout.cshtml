@@ -135,8 +135,8 @@
 						@if (ViewContext.RouteData.Values["controller"]?.ToString() != "Home")
 						{
 							<li class="breadcrumb-item">
-								<a href="@Url.Action("Index", ViewContext.RouteData.Values["controller"]?.ToString())s">
-									@ViewContext.RouteData.Values["controller"]
+								<a href="@Url.Action("Index", ViewContext.RouteData.Values["controller"]?.ToString())">
+									@ViewContext.RouteData.Values["controller"]s
 								</a>
 							</li>
 							@if (ViewContext.RouteData.Values["action"]?.ToString() != "Index")
