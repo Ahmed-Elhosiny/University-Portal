@@ -1,241 +1,529 @@
 ﻿@model University_Portal.ViewModels.SearchViewModel
 @{
-    Layout = "~/Views/Shared/MyLayout.cshtml";
-    ViewData["Title"] = "Students";
+    ViewData["Title"] = "Students Management";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h1 class="mb-0">
-        <i class="fas fa-user-graduate me-2 text-primary"></i>All Students
-        <small class="text-muted">(@Model.TotalCount found)</small>
-    </h1>
-    @Html.ActionLink("Add New Student", "Add", "Student", null, new { @class = "btn btn-success" })
+
+@section Styles {
+    <style>
+        .student-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .student-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: none;
+            border-radius: 20px;
+        }
+
+        .stats-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .level-badge {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .course-info {
+            background: rgba(102, 126, 234, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+    </style>
+}
+
+<!-- Page Header -->
+<div class="page-header fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="page-title">
+                    <i class="fas fa-user-graduate me-3"></i>
+                    Student Management
+                </h1>
+                <p class="lead mb-0">Manage and monitor student records efficiently</p>
+            </div>
+            <div class="col-lg-6 text-lg-end">
+                <a href="@Url.Action("Add", "Student")" class="btn btn-success btn-lg hover-lift">
+                    <i class="fas fa-user-plus me-2"></i>Add New Student
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+<div class="container">
+    <!-- Statistics Bar -->
+    <div class="stats-bar slide-in-left">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-users fa-2x text-primary me-3"></i>
+                    <div>
+                        <h3 class="mb-0 gradient-text">@Model.TotalCount</h3>
+                        <small class="text-muted">Total Students</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-book fa-2x text-success me-3"></i>
+                    <div>
+                        <h3 class="mb-0 gradient-text">@Model.Courses.Count()</h3>
+                        <small class="text-muted">Available Courses</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-chart-line fa-2x text-warning me-3"></i>
+                    <div>
+                        <h3 class="mb-0 gradient-text">@Model.CurrentPage</h3>
+                        <small class="text-muted">Current Page</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="d-flex align-items-center justify-content-center">
+                    <i class="fas fa-filter fa-2x text-info me-3"></i>
+                    <div>
+                        <h3 class="mb-0 gradient-text">@Model.TotalPages</h3>
+                        <small class="text-muted">Total Pages</small>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-}
 
-<!-- Search and Filter Panel -->
-<div class="card mb-4">
-    <div class="card-header">
-        <h5 class="mb-0">
-            <i class="fas fa-search me-2"></i>Search & Filter Students
-            <button class="btn btn-link btn-sm float-end" type="button" data-bs-toggle="collapse" 
-                    data-bs-target="#searchPanel" aria-expanded="true">
-                <i class="fas fa-chevron-down"></i>
-            </button>
-        </h5>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show slide-in-right" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show slide-in-right" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <strong>Error!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Enhanced Search Panel -->
+    <div class="card search-card mb-4 slide-in-left">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i class="fas fa-search me-2"></i>Advanced Student Search
+                <button class="btn btn-link btn-sm float-end text-white" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#searchPanel" aria-expanded="true">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </h5>
+        </div>
+        <div class="collapse show" id="searchPanel">
+            <div class="card-body">
+                @using (Html.BeginForm("Index", "Student", FormMethod.Get, new { @class = "row g-3" }))
+                {
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            <i class="fas fa-search me-1"></i>Search Name or Course
+                        </label>
+                        @Html.TextBoxFor(m => m.SearchTerm, new { 
+                            @class = "form-control", 
+                            placeholder = "Enter student or course name...",
+                            autocomplete = "off"
+                        })
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">
+                            <i class="fas fa-book me-1"></i>Course Filter
+                        </label>
+                        @Html.DropDownListFor(m => m.SelectedCourseId, 
+                            new SelectList(Model.Courses, "Id", "Name", Model.SelectedCourseId), 
+                            "All Courses", 
+                            new { @class = "form-select" })
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">
+                            <i class="fas fa-layer-group me-1"></i>Min Level
+                        </label>
+                        @Html.EditorFor(m => m.MinLevel, new { 
+                            htmlAttributes = new { @class = "form-control", min = "1", max = "5", placeholder = "1" } 
+                        })
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">
+                            <i class="fas fa-layer-group me-1"></i>Max Level
+                        </label>
+                        @Html.EditorFor(m => m.MaxLevel, new { 
+                            htmlAttributes = new { @class = "form-control", min = "1", max = "5", placeholder = "5" } 
+                        })
+                    </div>
+                    
+                    <div class="col-md-2">
+                        <label class="form-label">
+                            <i class="fas fa-sort me-1"></i>Sort By
+                        </label>
+                        @Html.DropDownListFor(m => m.SortBy, 
+                            new SelectList(new[] {
+                                new { Value = "Name", Text = "Name" },
+                                new { Value = "Age", Text = "Age" },
+                                new { Value = "Level", Text = "Level" },
+                                new { Value = "Course", Text = "Course" }
+                            }, "Value", "Text", Model.SortBy), 
+                            new { @class = "form-select" })
+                    </div>
+                    
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="fas fa-search me-1"></i>Search Students
+                                </button>
+                                <a href="@Url.Action("Index", "Student")" class="btn btn-outline-secondary">
+                                    <i class="fas fa-times me-1"></i>Clear Filters
+                                </a>
+                            </div>
+                            <div>
+                                @Html.Hidden("SortOrder", Model.SortOrder)
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="toggleSort()">
+                                    <i class="fas fa-sort me-1"></i>
+                                    @(Model.SortOrder == "asc" ? "↑ Ascending" : "↓ Descending")
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
     </div>
-    <div class="collapse show" id="searchPanel">
-        <div class="card-body">
-            @using (Html.BeginForm("Index", "Student", FormMethod.Get, new { @class = "row g-3" }))
-            {
-                <div class="col-md-4">
-                    <label class="form-label">Search Name or Course</label>
-                    @Html.TextBoxFor(m => m.SearchTerm, new { 
-                        @class = "form-control", 
-                        placeholder = "Enter student or course name..." 
-                    })
-                </div>
-                
-                <div class="col-md-2">
-                    <label class="form-label">Course</label>
-                    @Html.DropDownListFor(m => m.SelectedCourseId, 
-                        new SelectList(Model.Courses, "Id", "Name", Model.SelectedCourseId), 
-                        "All Courses", 
-                        new { @class = "form-select" })
-                </div>
-                
-                <div class="col-md-2">
-                    <label class="form-label">Min Level</label>
-                    @Html.EditorFor(m => m.MinLevel, new { 
-                        htmlAttributes = new { @class = "form-control", min = "1", max = "5", placeholder = "Min" } 
-                    })
-                </div>
-                
-                <div class="col-md-2">
-                    <label class="form-label">Max Level</label>
-                    @Html.EditorFor(m => m.MaxLevel, new { 
-                        htmlAttributes = new { @class = "form-control", min = "1", max = "5", placeholder = "Max" } 
-                    })
-                </div>
-                
-                <div class="col-md-2">
-                    <label class="form-label">Sort By</label>
-                    @Html.DropDownListFor(m => m.SortBy, 
-                        new SelectList(new[] {
-                            new { Value = "Name", Text = "Name" },
-                            new { Value = "Age", Text = "Age" },
-                            new { Value = "Level", Text = "Level" },
-                            new { Value = "Course", Text = "Course" }
-                        }, "Value", "Text", Model.SortBy), 
-                        new { @class = "form-select" })
-                </div>
-                
-                <div class="col-12">
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-search me-1"></i>Search
-                    </button>
-                    <a href="@Url.Action("Index", "Student")" class="btn btn-outline-secondary">
-                        <i class="fas fa-times me-1"></i>Clear
+
+    <!-- Results Section -->
+    @if (!Model.Students.Any())
+    {
+        <div class="card text-center py-5 fade-in">
+            <div class="card-body">
+                <i class="fas fa-user-slash fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No Students Found</h4>
+                @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) || Model.SelectedCourseId.HasValue)
+                {
+                    <p class="text-muted">No students match your search criteria. Try adjusting your filters.</p>
+                    <a href="@Url.Action("Index", "Student")" class="btn btn-outline-primary">
+                        <i class="fas fa-times me-1"></i>Clear Search
                     </a>
-                    <div class="btn-group float-end" role="group">
-                        @Html.Hidden("SortOrder", Model.SortOrder)
-                        <button type="button" class="btn btn-outline-info btn-sm" onclick="toggleSort()">
-                            <i class="fas fa-sort me-1"></i>
-                            @(Model.SortOrder == "asc" ? "Ascending" : "Descending")
-                        </button>
+                }
+                else
+                {
+                    <p class="text-muted">Get started by adding your first student to the system.</p>
+                    <a href="@Url.Action("Add", "Student")" class="btn btn-success">
+                        <i class="fas fa-user-plus me-1"></i>Add First Student
+                    </a>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card shadow-lg-custom fade-in">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>
+                    Student Directory (@Model.TotalCount found)
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
+                                <th><i class="fas fa-user me-1"></i>Student</th>
+                                <th><i class="fas fa-birthday-cake me-1"></i>Age</th>
+                                <th><i class="fas fa-layer-group me-1"></i>Level</th>
+                                <th><i class="fas fa-book me-1"></i>Course</th>
+                                <th class="text-center"><i class="fas fa-cogs me-1"></i>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model.Students)
+                            {
+                                <tr class="hover-lift">
+                                    <td>
+                                        <span class="badge bg-primary">#@student.Id</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrEmpty(student.Image) && student.Image != "default.png")
+                                            {
+                                                <img src="~/Images/@student.Image" class="student-avatar me-3" alt="@student.Name">
+                                            }
+                                            else
+                                            {
+                                                <div class="student-avatar me-3 bg-primary d-flex align-items-center justify-content-center">
+                                                    <i class="fas fa-user text-white"></i>
+                                                </div>
+                                            }
+                                            <div>
+                                                <div class="fw-bold text-primary">@student.Name</div>
+                                                <small class="text-muted">ID: @student.Id</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-info">@student.Age years</span>
+                                    </td>
+                                    <td>
+                                        <span class="level-badge">Level @student.Level</span>
+                                    </td>
+                                    <td>
+                                        <div class="course-info">
+                                            <div class="fw-bold">@student.Course.Name</div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-credit-card me-1"></i>
+                                                @student.Course.Credits credit@(student.Course.Credits > 1 ? "s" : "")
+                                            </small>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a href="@Url.Action("Details", "Student", new { Id = student.Id })" 
+                                               class="btn btn-outline-primary btn-sm" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <a href="@Url.Action("Update", "Student", new { Id = student.Id })" 
+                                               class="btn btn-outline-warning btn-sm" title="Edit Student">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-outline-danger btn-sm" 
+                                                    onclick="confirmDelete(@student.Id, '@student.Name')" title="Delete Student">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Enhanced Pagination -->
+            @if (Model.TotalPages > 1)
+            {
+                <div class="card-footer bg-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="text-muted">
+                            <small>
+                                Showing @((Model.CurrentPage - 1) * Model.PageSize + 1) to 
+                                @(Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount)) of @Model.TotalCount students
+                            </small>
+                        </div>
+                        
+                        <nav>
+                            <ul class="pagination mb-0">
+                                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", new { 
+                                        SearchTerm = Model.SearchTerm, 
+                                        SelectedCourseId = Model.SelectedCourseId,
+                                        MinLevel = Model.MinLevel,
+                                        MaxLevel = Model.MaxLevel,
+                                        SortBy = Model.SortBy,
+                                        SortOrder = Model.SortOrder,
+                                        CurrentPage = Model.CurrentPage - 1 
+                                    })">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </a>
+                                </li>
+                                
+                                @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
+                                {
+                                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Index", new { 
+                                            SearchTerm = Model.SearchTerm, 
+                                            SelectedCourseId = Model.SelectedCourseId,
+                                            MinLevel = Model.MinLevel,
+                                            MaxLevel = Model.MaxLevel,
+                                            SortBy = Model.SortBy,
+                                            SortOrder = Model.SortOrder,
+                                            CurrentPage = i 
+                                        })">@i</a>
+                                    </li>
+                                }
+                                
+                                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+                                    <a class="page-link" href="@Url.Action("Index", new { 
+                                        SearchTerm = Model.SearchTerm, 
+                                        SelectedCourseId = Model.SelectedCourseId,
+                                        MinLevel = Model.MinLevel,
+                                        MaxLevel = Model.MaxLevel,
+                                        SortBy = Model.SortBy,
+                                        SortOrder = Model.SortOrder,
+                                        CurrentPage = Model.CurrentPage + 1 
+                                    })">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             }
         </div>
+    }
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-user-times fa-4x text-danger mb-3"></i>
+                <h5>Are you sure you want to delete this student?</h5>
+                <p class="text-muted mb-4">
+                    <strong id="studentName"></strong><br>
+                    This action cannot be undone!
+                </p>
+                <div class="alert alert-warning">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <small>The student's profile picture and all associated data will be permanently removed.</small>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-1"></i>Cancel
+                </button>
+                <a id="deleteConfirmBtn" href="#" class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i>Delete Student
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 
-@if (!Model.Students.Any())
-{
-    <div class="alert alert-info text-center">
-        <i class="fas fa-info-circle me-2"></i>
-        @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) || Model.SelectedCourseId.HasValue)
-        {
-            <text>No students found matching your search criteria.</text>
-        }
-        else
-        {
-            <text>No students found. <a href="@Url.Action("Add", "Student")" class="alert-link">Add the first student</a>.</text>
-        }
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="text-center">
+        <div class="loading-spinner mb-3"></div>
+        <p class="text-muted">Loading students...</p>
     </div>
-}
-else
-{
-    <div class="card shadow-sm">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover table-striped mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>ID</th>
-                            <th>Student</th>
-                           
-                            <th>Level</th>
-                            <th>Course</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var student in Model.Students)
-                        {
-                            <tr>
-                                <td class="fw-bold">#@student.Id</td>
-                                <td>
-                                    <div class="d-flex align-items-center">
-                                        @if (!string.IsNullOrEmpty(student.Image) && student.Image != "default.png")
-                                        {
-                                            <img src="~/Images/@student.Image" class="rounded-circle me-2" 
-                                                 style="width: 40px; height: 40px; object-fit: cover;" alt="Student">
-                                        }
-                                        else
-                                        {
-                                            <i class="fas fa-user-circle text-muted me-2" style="font-size: 40px;"></i>
-                                        }
-                                        <div>
-                                            <div class="fw-bold">@student.Name</div>
-                                            <small class="text-muted">@student.Age years old</small>
-                                        </div>
-                                    </div>
-                                </td>
-                               
-                                <td>
-                                    <span class="badge bg-primary">Level @student.Level</span>
-                                </td>
-                                <td>
-                                    <div>
-                                        <span class="fw-bold">@student.Course.Name</span>
-                                        <small class="text-muted d-block">@student.Course.Credits credit(s)</small>
-                                    </div>
-                                </td>
-                                <td class="text-center">
-                                    @Html.ActionLink("Details", "Details", "Student", 
-                                        new { Id = student.Id }, 
-                                        new { @class = "btn btn-outline-primary btn-sm" })
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        
-        <!-- Pagination -->
-        @if (Model.TotalPages > 1)
-        {
-            <div class="card-footer">
-                <nav>
-                    <ul class="pagination justify-content-center mb-0">
-                        <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { 
-                                SearchTerm = Model.SearchTerm, 
-                                SelectedCourseId = Model.SelectedCourseId,
-                                MinLevel = Model.MinLevel,
-                                MaxLevel = Model.MaxLevel,
-                                SortBy = Model.SortBy,
-                                SortOrder = Model.SortOrder,
-                                CurrentPage = Model.CurrentPage - 1 
-                            })">Previous</a>
-                        </li>
-                        
-                        @for (int i = Math.Max(1, Model.CurrentPage - 2); i <= Math.Min(Model.TotalPages, Model.CurrentPage + 2); i++)
-                        {
-                            <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
-                                <a class="page-link" href="@Url.Action("Index", new { 
-                                    SearchTerm = Model.SearchTerm, 
-                                    SelectedCourseId = Model.SelectedCourseId,
-                                    MinLevel = Model.MinLevel,
-                                    MaxLevel = Model.MaxLevel,
-                                    SortBy = Model.SortBy,
-                                    SortOrder = Model.SortOrder,
-                                    CurrentPage = i 
-                                })">@i</a>
-                            </li>
-                        }
-                        
-                        <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
-                            <a class="page-link" href="@Url.Action("Index", new { 
-                                SearchTerm = Model.SearchTerm, 
-                                SelectedCourseId = Model.SelectedCourseId,
-                                MinLevel = Model.MinLevel,
-                                MaxLevel = Model.MaxLevel,
-                                SortBy = Model.SortBy,
-                                SortOrder = Model.SortOrder,
-                                CurrentPage = Model.CurrentPage + 1 
-                            })">Next</a>
-                        </li>
-                    </ul>
-                </nav>
-                
-                <div class="text-center mt-2">
-                    <small class="text-muted">
-                        Showing @((Model.CurrentPage - 1) * Model.PageSize + 1) to 
-                        @(Math.Min(Model.CurrentPage * Model.PageSize, Model.TotalCount)) of @Model.TotalCount students
-                    </small>
-                </div>
-            </div>
-        }
-    </div>
-}
+</div>
 
 @section Scripts {
     <script>
+        // Enhanced search functionality
         function toggleSort() {
             var currentOrder = document.querySelector('input[name="SortOrder"]').value;
             var newOrder = currentOrder === 'asc' ? 'desc' : 'asc';
             document.querySelector('input[name="SortOrder"]').value = newOrder;
+            showLoading();
             document.querySelector('form').submit();
         }
+
+        // Delete confirmation
+        function confirmDelete(studentId, studentName) {
+            document.getElementById('studentName').textContent = studentName;
+            document.getElementById('deleteConfirmBtn').href = '@Url.Action("Delete", "Student")/' + studentId;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+
+        // Loading overlay
+        function showLoading() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        // Show loading on form submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const forms = document.querySelectorAll('form');
+            forms.forEach(form => {
+                form.addEventListener('submit', function() {
+                    showLoading();
+                });
+            });
+
+            // Hide loading after page load
+            hideLoading();
+
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                const alerts = document.querySelectorAll('.alert');
+                alerts.forEach(alert => {
+                    if (alert.querySelector('.btn-close')) {
+                        bootstrap.Alert.getOrCreateInstance(alert).close();
+                    }
+                });
+            }, 5000);
+
+            // Search input enhancements
+            const searchInput = document.querySelector('input[name="SearchTerm"]');
+            if (searchInput) {
+                let timeout;
+                searchInput.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    const value = this.value;
+                    if (value.length > 2) {
+                        timeout = setTimeout(() => {
+                            // You could implement live search here
+                            console.log('Searching for:', value);
+                        }, 500);
+                    }
+                });
+            }
+        });
+
+        // Enhanced table row interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function(e) {
+                    // Don't trigger on button clicks
+                    if (e.target.closest('.btn-group')) return;
+                    
+                    // Get student ID and navigate to details
+                    const studentId = this.querySelector('.badge').textContent.replace('#', '');
+                    window.location.href = '@Url.Action("Details", "Student")/' + studentId;
+                });
+
+                // Add cursor pointer
+                row.style.cursor = 'pointer';
+            });
+        });
     </script>
 }
