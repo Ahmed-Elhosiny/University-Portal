@@ -154,7 +154,7 @@ namespace University_Portal.Controllers
                 return RedirectToAction("Index");
             }
 
-            var studentDetails = new StudentDetails
+            var studentDetails = new StudentDetailsViewModel
             {
                 SId = student.Id,
                 SName = student.Name,
