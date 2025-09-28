@@ -10,46 +10,78 @@ namespace University_Portal
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-
-            // Default Lifetime for AddDbContext => Scoped
-            builder.Services.AddDbContext<UniversityMvcContext>(
-                options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-                //ServiceLifetime.Transient,
-                //ServiceLifetime.Singleton
+            builder.Services.AddDbContext<UniversityMvcContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
             );
 
-
-
-            // Configure file upload limits
             builder.Services.Configure<FormOptions>(options =>
             {
-                options.ValueLengthLimit = 10 * 1024 * 1024;
+                options.ValueLengthLimit = 10 * 1024 * 1024; // 10MB
                 options.MultipartBodyLengthLimit = 10 * 1024 * 1024; // 10MB
-                options.MultipartHeadersLengthLimit = 10 * 1024 * 1024;
+                options.MultipartHeadersLengthLimit = 10 * 1024 * 1024; // 10MB
+                options.ValueCountLimit = int.MaxValue;
+                options.KeyLengthLimit = int.MaxValue;
             });
+
+            builder.Services.AddMemoryCache();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+
+                app.Use(async (context, next) =>
+                {
+                    context.Response.Headers.Append("X-Frame-Options", "DENY");
+                    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+                    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+                    await next();
+                });
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseAuthorization();
 
-            app.MapStaticAssets();
+            if (app.Environment.IsDevelopment())
+            {
+                app.MapStaticAssets();
+            }
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+            app.MapControllerRoute(
+                name: "studentDetails",
+                pattern: "student/{id:int}",
+                defaults: new { controller = "Student", action = "Details" });
+
+            app.MapControllerRoute(
+                name: "courseDetails",
+                pattern: "course/{id:int}",
+                defaults: new { controller = "Course", action = "Details" });
 
             app.Run();
         }
