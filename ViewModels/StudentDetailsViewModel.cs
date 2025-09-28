@@ -4,7 +4,7 @@ namespace University_Portal.ViewModels
 {
 
     [ModelMetadataType(typeof(Validations.StudentDetailsBuddyClass))]
-    public class StudentDetails
+    public class StudentDetailsViewModel
     {
         public int SId { get; set; }
         public string? SName { get; set; }
