@@ -15,6 +15,7 @@ namespace University_Portal.Controllers
         }
         public IActionResult Index()
         {
+            ViewBag.Enrollments = context.Students.Count();
             var courses = context.Courses.ToList();
             foreach (var item in courses)
             {
