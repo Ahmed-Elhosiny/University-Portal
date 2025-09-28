@@ -1,0 +1,29 @@
+﻿@{
+	Layout = "~/Views/Shared/MyLayout.cshtml";
+	ViewData["Title"] = "Home Page";
+}
+
+@section Styles {
+
+	<style>
+		.university-logo {
+			width: 256px;
+			height: 256px;
+			object-fit: cover;
+		}
+	</style>
+}
+
+
+
+<div class="container">
+	<main role="main" class="pb-3">
+		<div class="text-center">
+			<h1 class="display-4">Welcome to Our University Portal</h1>
+		</div>
+		<img src="/Images/university.jpg" class="rounded-circle mx-auto d-block university-logo" alt="University Logo">
+
+	</main>
+</div>
+
+

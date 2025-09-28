@@ -1,0 +1,92 @@
+﻿@model University_Portal.ViewModels.StudentDetails
+@{
+	Layout = "~/Views/Shared/MyLayout.cshtml";
+	ViewData["Title"] = "Student Details";
+}
+
+
+
+
+@section Styles {
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<style>
+		.student-image {
+			width: 256px;
+			height: 256px;
+			object-fit: cover;
+		}
+
+		.placeholder-icon {
+			font-size: 256px;
+			color: #ccc;
+		}
+	</style>
+}
+
+
+
+
+<h1>@Model.SName</h1>
+<table class="table table-hover table-bordered">
+	<tbody>
+		<tr>
+
+			<th scope="row">@Html.DisplayNameFor(s => s.SId)</th>
+			<td>@Model.SId</td>
+
+		</tr>
+		<tr>
+
+			<th scope="row">@Html.DisplayNameFor(s => s.SLevel)</th>
+			<td>@Model.SLevel</td>
+
+		</tr>
+		<tr>
+			<th scope="row">@Html.DisplayNameFor(s => s.CName)</th>
+			<td>@Model.CName</td>
+		</tr>
+		<tr>
+			<th scope="row">@Html.DisplayNameFor(s => s.CCredits)</th>
+			<td>@Model.CCredits Hour(s)</td>
+		</tr>
+
+	</tbody>
+
+</table>
+
+
+@if (!string.IsNullOrEmpty(Model.SImage))
+{
+	<img src="/Images/@Model.SImage" class="rounded-circle mx-auto d-block student-image" alt="Student Profile Picture">
+
+}
+else
+{
+	<div class="text-center">
+		<i class="bi bi-person-circle placeholder-icon"></i>
+	</div>
+}
+
+
+
+<div class="text-center mt-4">
+
+	<a href="@Url.Action("Update", "Student", new { id = Model.SId })"
+	   class="btn btn-warning btn-lg me-2"
+	   onclick="this.innerHTML='<i class=\'bi bi-spinner\'></i> Loading...'; this.disabled=true;">
+		<i class="bi bi-pencil-square"></i> Update Student
+	</a>
+	<a href="@Url.Action("Delete", "Student", new { id = Model.SId })"
+	   class="btn btn-danger btn-lg"
+	   onclick="return confirm('Are you sure you want to delete \'@Model.SName\' ?')">
+		<i class="bi bi-trash"></i> Delete Student
+	</a>
+	@* @Html.Hidden("studentCourse", Model); *@
+	@* <a href="@Url.Action("Delete", "Student", new { id = Model.SId })" class="btn btn-danger btn-lg">
+				<i class="bi bi-trash"></i> Delete Student
+			</a> *@
+
+</div>
+
+

@@ -1,0 +1,85 @@
+﻿@model Course
+@{
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+    ViewData["Title"] = "Add New Course";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-plus-circle me-2"></i>Add New Course
+                </h2>
+            </div>
+            <div class="card-body">
+                @using (Html.BeginForm("Add", "Course", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, null, new { @class = "alert alert-danger" })
+                    
+                    <div class="mb-3">
+                        @Html.LabelFor(s => s.Name, new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(s => s.Name, new { 
+                            htmlAttributes = new { 
+                                @class = "form-control", 
+                                placeholder = "Enter course name",
+                                required = "required"
+                            } 
+                        })
+                        @Html.ValidationMessageFor(s => s.Name, null, new { @class = "invalid-feedback d-block" })
+                    </div>
+
+                    <div class="mb-4">
+                        @Html.LabelFor(s => s.Credits, new { @class = "form-label fw-bold" })
+                        @Html.EditorFor(s => s.Credits, new { 
+                            htmlAttributes = new { 
+                                @class = "form-control", 
+                                placeholder = "Enter credit hours",
+                                min = "1",
+                                max = "6",
+                                required = "required"
+                            } 
+                        })
+                        @Html.ValidationMessageFor(s => s.Credits, null, new { @class = "invalid-feedback d-block" })
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="@Url.Action("Index", "Course")" class="btn btn-outline-secondary me-md-2">
+                            <i class="fas fa-arrow-left me-1"></i>Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary" id="submitBtn">
+                            <span class="spinner-border spinner-border-sm me-2 d-none" role="status"></span>
+                            <i class="fas fa-save me-1"></i>Add Course
+                        </button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Enhanced form submission with loading state
+            $('form').on('submit', function() {
+                var submitBtn = $('#submitBtn');
+                var spinner = submitBtn.find('.spinner-border');
+                var icon = submitBtn.find('.fas');
+                
+                if ($(this).valid()) {
+                    submitBtn.prop('disabled', true);
+                    spinner.removeClass('d-none');
+                    icon.addClass('d-none');
+                    submitBtn.html('<span class="spinner-border spinner-border-sm me-2" role="status"></span>Processing...');
+                }
+            });
+
+            // Auto-focus first input
+            $('#Name').focus();
+        });
+    </script>
+}
