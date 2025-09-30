@@ -29,7 +29,7 @@
 
 ```bash
 # Clone repository
-git clone https://github.com/yourusername/university-portal.git
+git clone https://github.com/Ahmed-Elhosiny/university-portal.git
 cd university-portal
 
 # Restore packages
