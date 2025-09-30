@@ -363,4 +363,9 @@ MigrationBackup/
 FodyWeavers.xsd
 
 #Custom Ignore
-wwwroot/Images
+wwwroot/Images/*
+!wwwroot/Images/default.png
+!wwwroot/Images/university.jpg
+!wwwroot/Images/male.png
+!wwwroot/Images/female.png
+
