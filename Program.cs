@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http.Features;
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using University_Portal.Models;
 
@@ -6,7 +6,7 @@ namespace University_Portal
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -35,6 +35,27 @@ namespace University_Portal
             });
 
             var app = builder.Build();
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<UniversityMvcContext>();
+
+                    // Apply any pending migrations
+                    context.Database.Migrate();
+
+                    // Seed the database
+                    var seeder = new University_Portal.Data.DatabaseSeeder(context);
+                    await seeder.SeedAsync();
+
+                    Console.WriteLine("✅ Database seeded successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ An error occurred while seeding the database: {ex.Message}");
+                }
+            }
 
             if (app.Environment.IsDevelopment())
             {
