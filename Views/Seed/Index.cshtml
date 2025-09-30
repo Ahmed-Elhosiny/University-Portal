@@ -1,0 +1,233 @@
+﻿@{
+    ViewData["Title"] = "Database Seeding";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .seed-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .seed-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .seed-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(253, 126, 20, 0.1));
+            border-left: 4px solid #ffc107;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+    </style>
+}
+
+<div class="container">
+    <div class="page-header fade-in">
+        <div class="text-center">
+            <h1 class="page-title">
+                <i class="fas fa-database me-3"></i>
+                Database Management
+            </h1>
+            <p class="lead mb-0">Seed, reset, or clear your database with sample data</p>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            <strong>Error!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="warning-box">
+        <h5>
+            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>
+            Important Notes
+        </h5>
+        <ul class="mb-0">
+            <li><strong>Seed Database:</strong> Adds sample data only if database is empty</li>
+            <li><strong>Clear Data:</strong> Removes all students and courses permanently</li>
+            <li><strong>Reset Database:</strong> Clears all data and adds fresh sample data</li>
+            <li class="text-danger"><strong>Warning:</strong> These operations cannot be undone!</li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <!-- Seed Database Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card seed-card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-seedling seed-icon text-success"></i>
+                    <h4 class="card-title">Seed Database</h4>
+                    <p class="card-text text-muted">
+                        Add realistic sample data including:
+                    </p>
+                    <ul class="list-unstyled mb-4">
+                        <li><i class="fas fa-check text-success me-2"></i>15 Courses</li>
+                        <li><i class="fas fa-check text-success me-2"></i>50 Students</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Diverse Names</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Random Enrollments</li>
+                    </ul>
+                    <form asp-action="SeedDatabase" method="post">
+                        <button type="submit" class="btn btn-success btn-lg w-100" onclick="return confirm('Are you sure you want to seed the database? This will only work if the database is empty.')">
+                            <i class="fas fa-plus-circle me-2"></i>
+                            Seed Database
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clear Data Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card seed-card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-trash-alt seed-icon text-danger"></i>
+                    <h4 class="card-title">Clear All Data</h4>
+                    <p class="card-text text-muted">
+                        Remove all data from database:
+                    </p>
+                    <ul class="list-unstyled mb-4">
+                        <li><i class="fas fa-times text-danger me-2"></i>Delete All Students</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Delete All Courses</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Clean Database</li>
+                        <li><i class="fas fa-times text-danger me-2"></i>Cannot Undo</li>
+                    </ul>
+                    <form asp-action="ClearData" method="post">
+                        <button type="submit" class="btn btn-danger btn-lg w-100" onclick="return confirm('⚠️ WARNING: This will permanently delete ALL students and courses! Are you absolutely sure?')">
+                            <i class="fas fa-trash me-2"></i>
+                            Clear All Data
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Database Card -->
+        <div class="col-md-4 mb-4">
+            <div class="card seed-card text-center h-100">
+                <div class="card-body">
+                    <i class="fas fa-sync-alt seed-icon text-primary"></i>
+                    <h4 class="card-title">Reset Database</h4>
+                    <p class="card-text text-muted">
+                        Clear and reseed in one step:
+                    </p>
+                    <ul class="list-unstyled mb-4">
+                        <li><i class="fas fa-sync text-primary me-2"></i>Remove Old Data</li>
+                        <li><i class="fas fa-sync text-primary me-2"></i>Add Fresh Sample Data</li>
+                        <li><i class="fas fa-sync text-primary me-2"></i>Perfect for Demos</li>
+                        <li><i class="fas fa-sync text-primary me-2"></i>Quick Reset</li>
+                    </ul>
+                    <form asp-action="ResetDatabase" method="post">
+                        <button type="submit" class="btn btn-primary btn-lg w-100" onclick="return confirm('This will delete all existing data and create fresh sample data. Continue?')">
+                            <i class="fas fa-redo me-2"></i>
+                            Reset & Reseed
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sample Data Preview -->
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-info-circle me-2"></i>
+                Sample Data Preview
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h6 class="text-primary">📚 Sample Courses Include:</h6>
+                    <div class="row">
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-laptop-code text-primary me-1"></i> Computer Science</li>
+                                <li><i class="fas fa-briefcase text-primary me-1"></i> Business Administration</li>
+                                <li><i class="fas fa-cogs text-primary me-1"></i> Mechanical Engineering</li>
+                                <li><i class="fas fa-heartbeat text-primary me-1"></i> Medicine</li>
+                                <li><i class="fas fa-building text-primary me-1"></i> Civil Engineering</li>
+                                <li><i class="fas fa-brain text-primary me-1"></i> Psychology</li>
+                                <li><i class="fas fa-bolt text-primary me-1"></i> Electrical Engineering</li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-drafting-compass text-primary me-1"></i> Architecture</li>
+                                <li><i class="fas fa-pills text-primary me-1"></i> Pharmacy</li>
+                                <li><i class="fas fa-gavel text-primary me-1"></i> Law</li>
+                                <li><i class="fas fa-chart-line text-primary me-1"></i> Economics</li>
+                                <li><i class="fas fa-palette text-primary me-1"></i> Graphic Design</li>
+                                <li><i class="fas fa-database text-primary me-1"></i> Data Science</li>
+                                <li><i class="fas fa-bullhorn text-primary me-1"></i> Marketing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="text-success">👥 Student Features:</h6>
+                    <ul>
+                        <li><strong>50 Diverse Students</strong> with international names</li>
+                        <li><strong>Realistic Ages</strong> between 18-34 years</li>
+                        <li><strong>Random Levels</strong> from 1 to 5</li>
+                        <li><strong>Distributed Enrollments</strong> across all courses</li>
+                        <li><strong>Unique Names</strong> - no duplicates</li>
+                        <li><strong>Balanced Distribution</strong> for realistic data</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="text-center mt-4 mb-5">
+        <h5 class="mb-3">Quick Navigation</h5>
+        <a href="@Url.Action("Index", "Home")" class="btn btn-outline-primary me-2">
+            <i class="fas fa-home me-1"></i>Dashboard
+        </a>
+        <a href="@Url.Action("Index", "Student")" class="btn btn-outline-success me-2">
+            <i class="fas fa-users me-1"></i>View Students
+        </a>
+        <a href="@Url.Action("Index", "Course")" class="btn btn-outline-warning">
+            <i class="fas fa-book me-1"></i>View Courses
+        </a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto-dismiss alerts
+        setTimeout(function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                if (alert.querySelector('.btn-close')) {
+                    bootstrap.Alert.getOrCreateInstance(alert).close();
+                }
+            });
+        }, 5000);
+    </script>
+}
