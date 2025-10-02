@@ -369,3 +369,6 @@ wwwroot/Images/*
 !wwwroot/Images/male.png
 !wwwroot/Images/female.png
 
+*.md
+!README.md
+
