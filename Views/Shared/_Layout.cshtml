@@ -1,50 +1,174 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - University_Portal</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - University Portal</title>
+    <meta name="description" content="Modern University Management System - Manage students, courses, and academic excellence" />
+    <meta name="author" content="Ahmed Elhosiny" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/University_Portal.styles.css" asp-append-version="true" />
+    
+    @await RenderSectionAsync("Styles", required: false)
+    
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
 <body>
+    <!-- Modern Navigation -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-lg" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">University_Portal</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand d-flex align-items-center fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-graduation-cap fa-2x me-2"></i>
+                    <span class="fs-4">University Portal</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link px-3" asp-controller="Home" asp-action="Index">
+                                <i class="fas fa-home me-1"></i>Dashboard
+                            </a>
                         </li>
+                        
+                        <!-- Students Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" id="studentsDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-graduate me-1"></i>Students
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" asp-controller="Student" asp-action="Index"><i class="fas fa-list me-2"></i>All Students</a></li>
+                                <li><a class="dropdown-item" asp-controller="Student" asp-action="Add"><i class="fas fa-user-plus me-2"></i>Add Student</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Courses Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" id="coursesDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-book me-1"></i>Courses
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" asp-controller="Course" asp-action="Index"><i class="fas fa-list me-2"></i>All Courses</a></li>
+                                <li><a class="dropdown-item" asp-controller="Course" asp-action="Add"><i class="fas fa-plus me-2"></i>Add Course</a></li>
+                            </ul>
+                        </li>
+                        
+                        <!-- Reports Link -->
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link px-3" asp-controller="Reports" asp-action="Index">
+                                <i class="fas fa-chart-line me-1"></i>Reports
+                            </a>
+                        </li>
+                        
+                        <!-- Management Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" id="managementDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-cog me-1"></i>Management
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" asp-controller="Seed" asp-action="Index"><i class="fas fa-database me-2"></i>Database Seeding</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="Home" asp-action="Privacy"><i class="fas fa-shield-alt me-2"></i>Privacy</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <!-- Main Content -->
+    <main role="main" class="pb-5">
+        @RenderBody()
+    </main>
+
+    <!-- Modern Footer -->
+    <footer class="mt-auto py-4" style="background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);">
         <div class="container">
-            &copy; 2025 - University_Portal - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="row text-white">
+                <div class="col-md-6">
+                    <h5 class="fw-bold mb-3"><i class="fas fa-graduation-cap me-2"></i>University Portal</h5>
+                    <p class="text-white-50">Modern student and course management system built with ASP.NET Core MVC.</p>
+                    <p class="text-white-50 mb-0">&copy; 2025 All rights reserved.</p>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-bold mb-3">Quick Links</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="@Url.Action("Index", "Home")" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-1"></i>Dashboard</a></li>
+                        <li><a href="@Url.Action("Index", "Student")" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-1"></i>Students</a></li>
+                        <li><a href="@Url.Action("Index", "Course")" class="text-white-50 text-decoration-none"><i class="fas fa-angle-right me-1"></i>Courses</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="fw-bold mb-3">Contact</h6>
+                    <ul class="list-unstyled text-white-50">
+                        <li><i class="fas fa-envelope me-2"></i>info@university.edu</li>
+                        <li><i class="fas fa-phone me-2"></i>+1 234 567 890</li>
+                        <li class="mt-3">
+                            <a href="#" class="text-white me-3"><i class="fab fa-facebook fa-lg"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-twitter fa-lg"></i></a>
+                            <a href="#" class="text-white me-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="text-center">
+            <div class="loading-spinner mb-3"></div>
+            <p class="text-muted">Loading...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
+    <script>
+        // Export Data Function
+        function exportData() {
+            alert('Export feature will be implemented with Excel/PDF export capabilities.');
+        }
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

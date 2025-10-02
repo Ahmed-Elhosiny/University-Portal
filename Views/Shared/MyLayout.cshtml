@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -9,19 +9,25 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<!-- Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/Day5_Assignment.styles.css" asp-append-version="true" />
 	@await RenderSectionAsync("Styles", required: false)
+	
+	<style>
+		body {
+			font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+	</style>
 </head>
 <body>
 	<header>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
+		<nav class="navbar navbar-expand-lg navbar-dark shadow" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
 			<div class="container">
-				<a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Home")">
-					<img src="~/Images/university.jpg" alt="University Logo"
-						 class="rounded-circle me-2" style="height: 40px; width: 40px; object-fit: cover;">
-					<span class="fw-bold">University Portal</span>
+				<a class="navbar-brand d-flex align-items-center fw-bold" href="@Url.Action("Index", "Home")">
+					<i class="fas fa-graduation-cap fa-2x me-2"></i>
+					<span class="fs-5">University Portal</span>
 				</a>
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -34,7 +40,7 @@
 					<ul class="navbar-nav ms-auto">
 						<li class="nav-item">
 							<a class="nav-link" asp-controller="Home" asp-action="Index">
-								<i class="fas fa-home me-1"></i>Home
+								<i class="fas fa-home me-1"></i>Dashboard
 							</a>
 						</li>
 
@@ -53,12 +59,6 @@
 								<li>
 									<a class="dropdown-item" asp-controller="Student" asp-action="Add">
 										<i class="fas fa-user-plus me-1"></i>Add New Student
-									</a>
-								</li>
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="#" onclick="showQuickStats()">
-										<i class="fas fa-chart-bar me-1"></i>Quick Stats
 									</a>
 								</li>
 							</ul>
@@ -81,16 +81,17 @@
 										<i class="fas fa-plus me-1"></i>Add New Course
 									</a>
 								</li>
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="#" onclick="showCourseStats()">
-										<i class="fas fa-chart-pie me-1"></i>Course Analytics
-									</a>
-								</li>
 							</ul>
 						</li>
 
-						<!-- Additional Management Dropdown (Optional) -->
+						<!-- Reports Link -->
+						<li class="nav-item">
+							<a class="nav-link" asp-controller="Reports" asp-action="Index">
+								<i class="fas fa-chart-line me-1"></i>Reports
+							</a>
+						</li>
+
+						<!-- Management Dropdown -->
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="managementDropdown"
 							   role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -102,20 +103,10 @@
 										<i class="fas fa-database me-1"></i>Database Seeding
 									</a>
 								</li>
-								<li>
-									<a class="dropdown-item" href="#" onclick="showDashboard()">
-										<i class="fas fa-tachometer-alt me-1"></i>Dashboard
-									</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#" onclick="exportData()">
-										<i class="fas fa-download me-1"></i>Export Data
-									</a>
-								</li>
 								<li><hr class="dropdown-divider"></li>
 								<li>
-									<a class="dropdown-item" href="#" onclick="showSettings()">
-										<i class="fas fa-sliders-h me-1"></i>Settings
+									<a class="dropdown-item" asp-controller="Home" asp-action="Privacy">
+										<i class="fas fa-shield-alt me-1"></i>Privacy Policy
 									</a>
 								</li>
 							</ul>
@@ -159,17 +150,22 @@
 		</div>
 	</main>
 
-	<footer class="bg-light border-top mt-5 py-4">
+	<footer class="bg-dark text-white mt-5 py-4">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-6">
-					<p class="text-muted mb-0">
+					<h5 class="fw-bold mb-2"><i class="fas fa-graduation-cap me-2"></i>University Portal</h5>
+					<p class="text-white-50 mb-0">
 						&copy; 2025 University Management System. All rights reserved.
 					</p>
 				</div>
 				<div class="col-md-6 text-md-end">
-					<a asp-controller="Home" asp-action="Privacy" class="text-decoration-none">
-						<i class="fas fa-shield-alt me-1"></i>Privacy Policy
+					<h6 class="fw-bold mb-2">Quick Links</h6>
+					<a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none me-3">
+						<i class="fas fa-home me-1"></i>Dashboard
+					</a>
+					<a asp-controller="Home" asp-action="Privacy" class="text-white-50 text-decoration-none">
+						<i class="fas fa-shield-alt me-1"></i>Privacy
 					</a>
 				</div>
 			</div>
@@ -180,30 +176,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<!-- jQuery -->
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-
-	<!-- Quick Actions JavaScript -->
-	<script>
-		function showQuickStats() {
-			// You can implement this to show a modal with student statistics
-			alert('Quick Stats feature - to be implemented!\n\nThis could show:\n• Total Students\n• Students by Level\n• Students by Course\n• Recent Enrollments');
-		}
-
-		function showCourseStats() {
-			alert('Course Analytics feature - to be implemented!\n\nThis could show:\n• Total Courses\n• Enrollment per Course\n• Popular Courses\n• Course Load Distribution');
-		}
-
-		function showDashboard() {
-			alert('Dashboard feature - to be implemented!\n\nThis could show:\n• Overview Statistics\n• Recent Activities\n• Charts and Graphs\n• Quick Actions');
-		}
-
-		function exportData() {
-			alert('Export Data feature - to be implemented!\n\nThis could allow:\n• Export Students to Excel\n• Export Courses to PDF\n• Generate Reports\n• Backup Database');
-		}
-
-		function showSettings() {
-			alert('Settings feature - to be implemented!\n\nThis could include:\n• System Configuration\n• User Preferences\n• Database Settings\n• Backup Options');
-		}
-	</script>
+	<!-- Custom JS -->
+	<script src="~/js/site.js" asp-append-version="true"></script>
 
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
