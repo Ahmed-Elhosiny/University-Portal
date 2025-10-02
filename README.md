@@ -8,13 +8,12 @@
 
 > **Enterprise-grade university management system** built with ASP.NET Core MVC. A complete solution for managing students, courses, and academic operations with a modern, intuitive interface and powerful analytics.
 
-**🌟 Perfect for portfolios, learning projects, and real-world academic management needs.**
-
-![Dashboard Preview](Screenshots/dashboard.png)
+![Dashboard Preview](Screenshots/1.Dashboard.png)
 
 ## ✨ Key Features
 
 ### 📚 Core Functionality
+
 - ✅ **Complete CRUD Operations** - Full Create, Read, Update, Delete for Students & Courses
 - 🔍 **Advanced Search & Filtering** - Multi-criteria search with real-time results
 - 📊 **Interactive Dashboard** - Real-time statistics with Chart.js visualizations
@@ -24,12 +23,14 @@
 - 💾 **Database Seeding** - Auto-populate with sample data (50 students & 15 courses)
 
 ### 📈 Reports & Analytics
+
 - 📥 **Data Export** - Export students and courses to CSV format
 - 📊 **Summary Reports** - Comprehensive overview reports in TXT format
 - 📋 **Detailed Analytics** - Course enrollment statistics and student demographics
 - 🎯 **Custom Reports** - Student details grouped by courses
 
 ### 🎨 Modern UI/UX
+
 - 🌈 **Gradient Design** - Beautiful color schemes and modern aesthetics
 - ✨ **Smooth Animations** - Fade-in, slide-in, and hover effects
 - 🎭 **Glass Morphism** - Modern card designs with backdrop blur
@@ -40,6 +41,7 @@
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - [.NET 9.0 SDK](https://dotnet.microsoft.com/download)
 - [SQL Server 2019+](https://www.microsoft.com/sql-server) or SQL Server Express
 
@@ -63,19 +65,18 @@ dotnet ef database update
 dotnet run
 ```
 
-
-
 Database auto-seeds with sample data on first run! 🎉
 
 ## 📸 Screenshots
 
-| Dashboard | Students | Courses |
-|-----------|----------|---------|
-| ![Dashboard](Screenshots/dashboard.png) | ![Students](Screenshots/students.png) | ![Courses](Screenshots/courses.png) |
+| Dashboard                                 | Students                                | Courses                               |
+| ----------------------------------------- | --------------------------------------- | ------------------------------------- |
+| ![Dashboard](Screenshots/1.Dashboard.png) | ![Students](Screenshots/2.Students.png) | ![Courses](Screenshots/4.Courses.png) |
 
 ## 🛠️ Tech Stack
 
 ### Backend
+
 - **Framework:** ASP.NET Core 9.0 MVC
 - **Language:** C# 14.0
 - **ORM:** Entity Framework Core 9.0
@@ -83,6 +84,7 @@ Database auto-seeds with sample data on first run! 🎉
 - **Architecture:** MVC Pattern with Repository-like structure
 
 ### Frontend
+
 - **CSS Framework:** Bootstrap 5.3
 - **Icons:** Font Awesome 6.4
 - **Charts:** Chart.js 4.x
@@ -90,6 +92,7 @@ Database auto-seeds with sample data on first run! 🎉
 - **JavaScript:** Vanilla JS with modern ES6+ features
 
 ### Additional Libraries
+
 - **Image Processing:** System.Drawing.Common
 - **Validation:** Data Annotations, jQuery Validation
 - **Session Management:** ASP.NET Core Session
@@ -132,6 +135,7 @@ university-portal/
 ## 💾 Database Seeding
 
 Visit `/Seed/Index` for manual control:
+
 - 🌱 Seed 50 students & 15 courses
 - 🔄 Reset database for demos
 - 🗑️ Clear all data
@@ -139,6 +143,7 @@ Visit `/Seed/Index` for manual control:
 ## 🎯 Detailed Features
 
 ### 👨‍🎓 Student Management
+
 - **Full CRUD Operations** - Add, edit, view, and delete student records
 - **Profile Pictures** - Upload and manage student photos with validation
 - **Advanced Search** - Multi-criteria filtering (name, course, level, age range)
@@ -147,6 +152,7 @@ Visit `/Seed/Index` for manual control:
 - **Bulk Operations** - Export student data to CSV
 
 ### 📚 Course Management
+
 - **Course Creation** - Add courses with credits and descriptions
 - **Enrollment Tracking** - Real-time student enrollment counts
 - **Visual Cards** - Modern card-based course display with student avatars
@@ -154,6 +160,7 @@ Visit `/Seed/Index` for manual control:
 - **Statistics** - View enrollment trends and popular courses
 
 ### 📊 Dashboard & Analytics
+
 - **Real-time Statistics** - Total students, courses, enrollments, averages
 - **Interactive Charts** - Bar charts for course enrollment (Chart.js)
 - **Level Distribution** - Visual breakdown of students by academic level
@@ -162,6 +169,7 @@ Visit `/Seed/Index` for manual control:
 - **Animated Counters** - Smooth number animations for statistics
 
 ### 📈 Reports & Export
+
 - **CSV Export** - Download student and course data
 - **Summary Reports** - Comprehensive system overview
 - **Student Details** - Detailed reports grouped by courses
@@ -170,6 +178,7 @@ Visit `/Seed/Index` for manual control:
 - **Print-Friendly** - Optimized layouts for printing
 
 ### 🎨 UI/UX Excellence
+
 - **Modern Design** - Gradient backgrounds and glass morphism effects
 - **Responsive Layout** - Perfect on desktop, tablet, and mobile
 - **Smooth Animations** - Fade-in, slide-in, hover, and loading effects
@@ -229,22 +238,20 @@ Contributions are welcome! Here's how you can help:
 5. **Open** a Pull Request
 
 Please ensure your PR:
+
 - Follows the existing code style
 - Includes appropriate tests
 - Updates documentation as needed
 - Has a clear description of changes
 
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
 **Ahmed Elhosiny**
 
 - GitHub: [@Ahmed-Elhosiny](https://github.com/Ahmed-Elhosiny)
-- LinkedIn: [Connect with me](https://linkedin.com/in/ahmed-elhosiny)
-- Portfolio: [View my work](https://ahmed-elhosiny.github.io)
+- LinkedIn: [Connect with me](https://www.linkedin.com/in/ahmed-elhosiny-657b301b6/)
+- Portfolio: [View my work](https://ahmed-elhosiny.netlify.app)
 
 ## 🙏 Acknowledgments
 
@@ -258,9 +265,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or need help:
 
-- 📧 Email: ahmed.elhosiny@example.com
+- 📧 Email: ahmed.elhosiny842@gmail.com
 - 💬 Open an [Issue](https://github.com/Ahmed-Elhosiny/university-portal/issues)
-- 📖 Check the [Wiki](https://github.com/Ahmed-Elhosiny/university-portal/wiki)
 
 ---
 
@@ -270,8 +276,8 @@ If you have any questions or need help:
 
 **Made with ❤️ using ASP.NET Core MVC**
 
-*Perfect for portfolios, learning, and real-world projects*
+_Perfect for portfolios, learning, and real-world projects_
 
-[Report Bug](https://github.com/Ahmed-Elhosiny/university-portal/issues) · [Request Feature](https://github.com/Ahmed-Elhosiny/university-portal/issues) · [Documentation](https://github.com/Ahmed-Elhosiny/university-portal/wiki)
+[Report Bug](https://github.com/Ahmed-Elhosiny/university-portal/issues) · [Request Feature](https://github.com/Ahmed-Elhosiny/university-portal/issues) ·
 
 </div>
