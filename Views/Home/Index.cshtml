@@ -1,4 +1,4 @@
-﻿@model University_Portal.ViewModels.DashboardViewModel
+@model University_Portal.ViewModels.DashboardViewModel
 @{
 	ViewData["Title"] = "Dashboard";
 }
@@ -431,72 +431,72 @@
 		// Course Enrollment Chart
 		@if (Model.CourseStats.Any())
 		{
-						<text>
-						const ctx = document.getElementById('courseChart').getContext('2d');
-						const courseChart = new Chart(ctx, {
-							type: 'bar',
-							data: {
-								labels: [@Html.Raw(string.Join(",", Model.CourseStats.Select(c => $"'{c.CourseName}'")))],
-								datasets: [{
-									label: 'Number of Students',
-									data: [@string.Join(",", Model.CourseStats.Select(c => c.StudentCount))],
-									backgroundColor: [
-										'rgba(54, 162, 235, 0.8)',
-										'rgba(255, 99, 132, 0.8)',
-										'rgba(255, 205, 86, 0.8)',
-										'rgba(75, 192, 192, 0.8)',
-										'rgba(153, 102, 255, 0.8)'
-									],
-									borderColor: [
-										'rgba(54, 162, 235, 1)',
-										'rgba(255, 99, 132, 1)',
-										'rgba(255, 205, 86, 1)',
-										'rgba(75, 192, 192, 1)',
-										'rgba(153, 102, 255, 1)'
-									],
-									borderWidth: 2,
-									borderRadius: 8,
-									borderSkipped: false,
-								}]
+			<text>
+			const ctx = document.getElementById('courseChart').getContext('2d');
+			const courseChart = new Chart(ctx, {
+				type: 'bar',
+				data: {
+					labels: [@Html.Raw(string.Join(",", Model.CourseStats.Select(c => $"'{c.CourseName}'")))],
+					datasets: [{
+						label: 'Number of Students',
+						data: [@string.Join(",", Model.CourseStats.Select(c => c.StudentCount))],
+						backgroundColor: [
+							'rgba(54, 162, 235, 0.8)',
+							'rgba(255, 99, 132, 0.8)',
+							'rgba(255, 205, 86, 0.8)',
+							'rgba(75, 192, 192, 0.8)',
+							'rgba(153, 102, 255, 0.8)'
+						],
+						borderColor: [
+							'rgba(54, 162, 235, 1)',
+							'rgba(255, 99, 132, 1)',
+							'rgba(255, 205, 86, 1)',
+							'rgba(75, 192, 192, 1)',
+							'rgba(153, 102, 255, 1)'
+						],
+						borderWidth: 2,
+						borderRadius: 8,
+						borderSkipped: false,
+					}]
+				},
+				options: {
+					responsive: true,
+					maintainAspectRatio: false,
+					plugins: {
+						legend: {
+							display: false
+						},
+						tooltip: {
+							backgroundColor: 'rgba(0,0,0,0.8)',
+							titleColor: 'white',
+							bodyColor: 'white',
+							cornerRadius: 8,
+						}
+					},
+					scales: {
+						y: {
+							beginAtZero: true,
+							grid: {
+								color: 'rgba(0,0,0,0.1)'
 							},
-							options: {
-								responsive: true,
-								maintainAspectRatio: false,
-								plugins: {
-									legend: {
-										display: false
-									},
-									tooltip: {
-										backgroundColor: 'rgba(0,0,0,0.8)',
-										titleColor: 'white',
-										bodyColor: 'white',
-										cornerRadius: 8,
-									}
-								},
-								scales: {
-									y: {
-										beginAtZero: true,
-										grid: {
-											color: 'rgba(0,0,0,0.1)'
-										},
-										ticks: {
-											stepSize: 1
-										}
-									},
-									x: {
-										grid: {
-											display: false
-										}
-									}
-								}
+							ticks: {
+								stepSize: 1
 							}
-						});
-						</text>
+						},
+						x: {
+							grid: {
+								display: false
+							}
+						}
+					}
+				}
+			});
+			</text>
 		}
 
 		function generateReport() {
-			// Show a modal or redirect to report generation
-			alert('Report generation feature coming soon!\n\nThis will allow you to:\n• Export student lists to Excel\n• Generate course enrollment reports\n• Create PDF summaries\n• Schedule automated reports');
+			// Redirect to reports page
+			window.location.href = '@Url.Action("Index", "Reports")';
 		}
 
 		// Add some interactive animations
