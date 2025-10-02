@@ -1,0 +1,334 @@
+@{
+    ViewData["Title"] = "Reports & Analytics";
+    Layout = "~/Views/Shared/MyLayout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .report-card {
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 100%;
+        }
+
+        .report-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .report-icon.success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .report-icon.warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            box-shadow: 0 4px 15px rgba(255, 193, 7, 0.4);
+        }
+
+        .report-icon.info {
+            background: linear-gradient(135deg, #17a2b8 0%, #6f42c1 100%);
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.4);
+        }
+
+        .stats-box {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+}
+
+<!-- Page Header -->
+<div class="page-header fade-in">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="page-title">
+                    <i class="fas fa-chart-line me-3"></i>
+                    Reports & Analytics
+                </h1>
+                <p class="lead mb-0">Export data and generate comprehensive reports</p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="@Url.Action("Index", "Home")" class="btn btn-outline-light btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <!-- Quick Stats -->
+    <div class="stats-box slide-in-left">
+        <h4 class="mb-4 text-center">
+            <i class="fas fa-chart-bar me-2"></i>Quick Statistics
+        </h4>
+        <div class="row g-3">
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-users fa-2x text-primary mb-2"></i>
+                    <div class="stat-number" id="totalStudents">0</div>
+                    <small class="text-muted">Total Students</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-book fa-2x text-success mb-2"></i>
+                    <div class="stat-number" id="totalCourses">0</div>
+                    <small class="text-muted">Total Courses</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-graduation-cap fa-2x text-warning mb-2"></i>
+                    <div class="stat-number" id="totalEnrollments">0</div>
+                    <small class="text-muted">Enrollments</small>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-item">
+                    <i class="fas fa-chart-line fa-2x text-info mb-2"></i>
+                    <div class="stat-number" id="avgPerCourse">0</div>
+                    <small class="text-muted">Avg per Course</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Options -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h3 class="mb-4">
+                <i class="fas fa-download me-2"></i>Data Export Options
+            </h3>
+        </div>
+
+        <!-- Students Export -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card report-card slide-in-left">
+                <div class="card-body text-center p-4">
+                    <div class="report-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h5 class="card-title mb-3">Students Data</h5>
+                    <p class="text-muted mb-4">Export complete student records with course information</p>
+                    <a href="@Url.Action("ExportStudentsCSV", "Reports")" class="btn btn-primary w-100">
+                        <i class="fas fa-file-csv me-2"></i>Export CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Courses Export -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card report-card slide-in-left" style="animation-delay: 0.1s;">
+                <div class="card-body text-center p-4">
+                    <div class="report-icon success">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <h5 class="card-title mb-3">Courses Data</h5>
+                    <p class="text-muted mb-4">Export course details with enrollment statistics</p>
+                    <a href="@Url.Action("ExportCoursesCSV", "Reports")" class="btn btn-success w-100">
+                        <i class="fas fa-file-csv me-2"></i>Export CSV
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Report -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card report-card slide-in-left" style="animation-delay: 0.2s;">
+                <div class="card-body text-center p-4">
+                    <div class="report-icon warning">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h5 class="card-title mb-3">Summary Report</h5>
+                    <p class="text-muted mb-4">Comprehensive overview of all statistics</p>
+                    <a href="@Url.Action("SummaryReport", "Reports")" class="btn btn-warning w-100">
+                        <i class="fas fa-file-alt me-2"></i>Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Details -->
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card report-card slide-in-left" style="animation-delay: 0.3s;">
+                <div class="card-body text-center p-4">
+                    <div class="report-icon info">
+                        <i class="fas fa-list-alt"></i>
+                    </div>
+                    <h5 class="card-title mb-3">Student Details</h5>
+                    <p class="text-muted mb-4">Detailed student list grouped by courses</p>
+                    <a href="@Url.Action("StudentDetailsReport", "Reports")" class="btn btn-info w-100">
+                        <i class="fas fa-file-alt me-2"></i>Generate Report
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Reports -->
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-4">
+                <i class="fas fa-chart-bar me-2"></i>Advanced Analytics
+            </h3>
+        </div>
+
+        <!-- Course Analytics -->
+        <div class="col-lg-6 mb-4">
+            <div class="card report-card slide-in-right">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="report-icon me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                            <i class="fas fa-analytics"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Course Analytics</h5>
+                            <p class="text-muted mb-0">Detailed enrollment and performance metrics</p>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Enrollment statistics per course</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Average student age and level</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Course popularity rankings</li>
+                    </ul>
+                    <a href="@Url.Action("CourseAnalyticsReport", "Reports")" class="btn btn-primary w-100">
+                        <i class="fas fa-download me-2"></i>Download Analytics Report
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Custom Report Builder (Future Feature) -->
+        <div class="col-lg-6 mb-4">
+            <div class="card report-card slide-in-right" style="animation-delay: 0.1s;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="report-icon success me-3" style="width: 60px; height: 60px; font-size: 1.5rem;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-1">Custom Report Builder</h5>
+                            <p class="text-muted mb-0">Create personalized reports with custom filters</p>
+                        </div>
+                    </div>
+                    <ul class="list-unstyled mb-3">
+                        <li><i class="fas fa-check text-success me-2"></i>Select specific data fields</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Apply custom filters and sorting</li>
+                        <li><i class="fas fa-check text-success me-2"></i>Export in multiple formats</li>
+                    </ul>
+                    <button class="btn btn-outline-success w-100" onclick="showComingSoon()">
+                        <i class="fas fa-magic me-2"></i>Build Custom Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report History (Future Feature) -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card glass-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="fas fa-history me-2"></i>Recent Report Activity
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center py-5">
+                        <i class="fas fa-file-alt fa-4x text-muted mb-3"></i>
+                        <h5 class="text-muted">Report History Coming Soon</h5>
+                        <p class="text-muted">Track and manage your generated reports in one place</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Fetch and display statistics
+        async function loadStatistics() {
+            try {
+                // In a real application, you would fetch this from an API endpoint
+                // For now, we'll use placeholder animation
+                animateCounter('totalStudents', 150);
+                animateCounter('totalCourses', 25);
+                animateCounter('totalEnrollments', 150);
+                animateCounter('avgPerCourse', 6);
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            let currentValue = 0;
+            const increment = targetValue / 50;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(currentValue);
+            }, 30);
+        }
+
+        function showComingSoon() {
+            Toast.show('Custom Report Builder coming soon! This feature will allow you to create personalized reports with advanced filtering options.', 'info', 5000);
+        }
+
+        // Load statistics on page load
+        document.addEventListener('DOMContentLoaded', loadStatistics);
+
+        // Add download tracking
+        document.querySelectorAll('a[href*="Export"], a[href*="Report"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                const reportType = this.textContent.trim();
+                Toast.show(`Generating ${reportType}...`, 'info', 2000);
+            });
+        });
+    </script>
+}
